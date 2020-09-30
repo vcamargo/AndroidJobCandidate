@@ -1,0 +1,42 @@
+package app.storytel.candidate.com.webservice
+
+import app.storytel.candidate.com.model.Comment
+import app.storytel.candidate.com.model.Photo
+import app.storytel.candidate.com.model.Post
+import io.reactivex.Single
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Path
+
+interface Webservice {
+
+    companion object {
+        private const val BASE_URL = "https://jsonplaceholder.typicode.com"
+
+        fun create(): Webservice {
+
+            val client = OkHttpClient.Builder()
+                .build()
+
+            return Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+                .create(Webservice::class.java)
+        }
+    }
+
+    @GET("/posts")
+    fun getPosts(): Single<List<Post>>
+
+    @GET("/photos")
+    fun getPhotos(): Single<List<Photo>>
+
+    @GET("/posts/{id}/comments")
+    fun getComments(@Path("id") postId: Int): Single<List<Comment>>
+}
