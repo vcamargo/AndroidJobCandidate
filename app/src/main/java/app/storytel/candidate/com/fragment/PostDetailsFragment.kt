@@ -1,20 +1,17 @@
 package app.storytel.candidate.com.fragment
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import app.storytel.candidate.com.R
 import app.storytel.candidate.com.databinding.FragmentPostDetailsBinding
-import app.storytel.candidate.com.repository.Repository
-import app.storytel.candidate.com.viewmodel.PostDetailsViewModel
-import app.storytel.candidate.com.viewmodel.ViewModelFactory
-import kotlinx.android.synthetic.main.fragment_post_details.*
 
 class PostDetailsFragment : Fragment() {
 
@@ -28,6 +25,13 @@ class PostDetailsFragment : Fragment() {
         context ?: return binding.root
 
         subscribeUi(binding)
+
+        // Show Back Arrow in the Toolbar
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.root.findViewById<Toolbar>(R.id.toolbar)
+            .setupWithNavController(navController, appBarConfiguration)
 
         return binding.root
     }
