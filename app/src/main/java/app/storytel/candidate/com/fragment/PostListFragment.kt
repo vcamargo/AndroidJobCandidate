@@ -6,7 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import app.storytel.candidate.com.R
 import app.storytel.candidate.com.adapter.PostListAdapter
 import app.storytel.candidate.com.databinding.FragmentPostListBinding
@@ -28,6 +32,13 @@ class PostListFragment : Fragment() {
         context ?: return binding.root
 
         subscribeUi(PostListAdapter(), binding)
+
+        // Show Fragment Title in Toolbar
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        binding.root.findViewById<Toolbar>(R.id.toolbar)
+            .setupWithNavController(navController, appBarConfiguration)
         return binding.root
     }
 
