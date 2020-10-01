@@ -22,5 +22,11 @@
         <argument
             android:name="postId"
             app:argType="integer" />
+        <argument
+            android:name="postImageUrl"
+            app:argType="string" />
+        <argument
+            android:name="postBody"
+            app:argType="string" />
     </fragment>
 </navigation>

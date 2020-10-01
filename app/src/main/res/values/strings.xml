@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_details">Details</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_connection_title">No Internet Connection</string>
+    <string name="no_connection_desc">Ensure that you have internet connection, and try again.</string>
+    <string name="no_connection_retry">Try again</string>
 </resources>
