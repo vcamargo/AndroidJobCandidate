@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.model.Photo
-import app.storytel.candidate.com.model.Post
+import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.SingleObserver
 import io.reactivex.disposables.Disposable
@@ -16,24 +16,14 @@ class PostListViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val posts: MutableLiveData<List<Post>> by lazy {
-        MutableLiveData<List<Post>>().also {
+    private val posts: MutableLiveData<List<PostAndPhoto>> by lazy {
+        MutableLiveData<List<PostAndPhoto>>().also {
             loadPosts()
         }
     }
 
-    private val photos: MutableLiveData<List<Photo>> by lazy {
-        MutableLiveData<List<Photo>>().also {
-            loadPhotos()
-        }
-    }
-
-    fun getPosts() : LiveData<List<Post>> {
+    fun getPosts() : LiveData<List<PostAndPhoto>> {
         return posts
-    }
-
-    fun getPhotos() : LiveData<List<Photo>> {
-        return photos
     }
 
     fun loadPosts() {
@@ -44,13 +34,14 @@ class PostListViewModel(
         repository.getPhotos(LoadPhotosCallback())
     }
 
-    private inner class LoadPostsCallback : SingleObserver<List<Post>> {
+    private inner class LoadPostsCallback : SingleObserver<List<PostAndPhoto>> {
         override fun onSubscribe(d: Disposable) {
             //showLoading.set(View.VISIBLE)
         }
 
-        override fun onSuccess(t: List<Post>) {
+        override fun onSuccess(t: List<PostAndPhoto>) {
             posts.postValue(t)
+            loadPhotos()
             //showLoading.set(View.GONE)
             //noConnVisibility.set(View.GONE)
             //resErrorVisibility.set(View.GONE)
@@ -70,15 +61,20 @@ class PostListViewModel(
 
     private inner class LoadPhotosCallback : SingleObserver<List<Photo>> {
         override fun onSubscribe(d: Disposable) {
-            TODO("Not yet implemented")
+
         }
 
         override fun onSuccess(t: List<Photo>) {
-            TODO("Not yet implemented")
+            posts.value?.let {
+                val photos = t.take(it.size)
+                it.mapIndexed { index, postAndPhoto ->
+                    postAndPhoto.thumbnailUrl = photos[index].thumbnailUrl
+                }
+            }
         }
 
         override fun onError(e: Throwable) {
-            TODO("Not yet implemented")
+
         }
     }
 }

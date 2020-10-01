@@ -4,12 +4,8 @@
     xmlns:tool="http://schemas.android.com/tools">
     <data>
         <variable
-            name="title"
-            type="String" />
-
-        <variable
-            name="body"
-            type="String" />
+            name="comment"
+            type="app.storytel.candidate.com.model.Comment" />
     </data>
 
 <androidx.cardview.widget.CardView
@@ -29,7 +25,7 @@
             android:id="@+id/comment_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{title}"
+            android:text="@{comment.name}"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/comment_title"
             app:layout_constraintVertical_bias="0.0"
             tool:text="Comment text2"
-            android:text="@{body}"/>
+            android:text="@{comment.body}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,7 +2,7 @@ package app.storytel.candidate.com.webservice
 
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.model.Photo
-import app.storytel.candidate.com.model.Post
+import app.storytel.candidate.com.model.PostAndPhoto
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -32,7 +32,7 @@ interface Webservice {
     }
 
     @GET("/posts")
-    fun getPosts(): Single<List<Post>>
+    fun getPosts(): Single<List<PostAndPhoto>>
 
     @GET("/photos")
     fun getPhotos(): Single<List<Photo>>

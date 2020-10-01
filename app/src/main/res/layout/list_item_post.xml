@@ -10,7 +10,7 @@
             type="android.view.View.OnClickListener"/>
         <variable
             name="post"
-            type="app.storytel.candidate.com.model.Post" />
+            type="app.storytel.candidate.com.model.PostAndPhoto" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +27,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/baseline_image_black_18"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            app:imageUrl="@{post.thumbnailUrl}"/>
 
         <TextView
             android:id="@+id/title"

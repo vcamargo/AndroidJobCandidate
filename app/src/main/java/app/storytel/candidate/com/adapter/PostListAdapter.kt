@@ -11,8 +11,9 @@ import app.storytel.candidate.com.BR
 import app.storytel.candidate.com.databinding.ListItemPostBinding
 import app.storytel.candidate.com.fragment.PostListFragmentDirections
 import app.storytel.candidate.com.model.Post
+import app.storytel.candidate.com.model.PostAndPhoto
 
-class PostListAdapter : ListAdapter<Post, RecyclerView.ViewHolder>(PostDiffCallback()) {
+class PostListAdapter : ListAdapter<PostAndPhoto, RecyclerView.ViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return PostViewHolder(
             ListItemPostBinding.inflate(
@@ -35,19 +36,19 @@ class PostListAdapter : ListAdapter<Post, RecyclerView.ViewHolder>(PostDiffCallb
         }
 
         private fun navigateToPost(
-            post: Post,
+            post: PostAndPhoto,
             view: View
         ) {
             val direction =
                 PostListFragmentDirections.actionPostListFragmentToPostDetailsFragment(
                     post.id,
-                    "https://via.placeholder.com/600/92c952",
+                    post.thumbnailUrl,
                     post.body
                 )
             view.findNavController().navigate(direction)
         }
 
-        fun bind(item: Post) {
+        fun bind(item: PostAndPhoto) {
             binding.apply {
                 setVariable(BR.post, item)
                 executePendingBindings()
@@ -61,13 +62,13 @@ class PostListAdapter : ListAdapter<Post, RecyclerView.ViewHolder>(PostDiffCallb
     }
 }
 
-private class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
+private class PostDiffCallback : DiffUtil.ItemCallback<PostAndPhoto>() {
 
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
+    override fun areItemsTheSame(oldItem: PostAndPhoto, newItem: PostAndPhoto): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
+    override fun areContentsTheSame(oldItem: PostAndPhoto, newItem: PostAndPhoto): Boolean {
         return oldItem == newItem
     }
 }
