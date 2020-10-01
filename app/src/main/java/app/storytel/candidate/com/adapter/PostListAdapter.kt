@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import app.storytel.candidate.com.BR
 import app.storytel.candidate.com.databinding.ListItemPostBinding
 import app.storytel.candidate.com.fragment.PostListFragmentDirections
-import app.storytel.candidate.com.model.Post
 import app.storytel.candidate.com.model.PostAndPhoto
 
 class PostListAdapter : ListAdapter<PostAndPhoto, RecyclerView.ViewHolder>(PostDiffCallback()) {
@@ -25,7 +24,7 @@ class PostListAdapter : ListAdapter<PostAndPhoto, RecyclerView.ViewHolder>(PostD
     }
 
     class PostViewHolder(
-        private val binding: ListItemPostBinding
+        val binding: ListItemPostBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.setClickListener {
@@ -58,7 +57,16 @@ class PostListAdapter : ListAdapter<PostAndPhoto, RecyclerView.ViewHolder>(PostD
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val post = getItem(position)
-        (holder as PostViewHolder).bind(post)
+        (holder as? PostViewHolder)?.bind(post)
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        (holder as? PostViewHolder)?.binding?.let {
+            it.post = null
+            it.executePendingBindings()
+        }
+
+        super.onViewRecycled(holder)
     }
 }
 

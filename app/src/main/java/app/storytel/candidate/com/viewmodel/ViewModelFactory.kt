@@ -20,7 +20,7 @@ class ViewModelFactory(
         if (modelClass.isAssignableFrom(PostListViewModel::class.java)) {
             return PostListViewModel(repository, handle) as T
         } else if (modelClass.isAssignableFrom(PostDetailsViewModel::class.java)) {
-                return PostDetailsViewModel(repository) as T
+                return PostDetailsViewModel(repository, handle) as T
             }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

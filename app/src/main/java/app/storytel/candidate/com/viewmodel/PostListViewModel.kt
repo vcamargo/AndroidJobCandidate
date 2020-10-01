@@ -1,5 +1,7 @@
 package app.storytel.candidate.com.viewmodel
 
+import android.view.View
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -21,6 +23,13 @@ class PostListViewModel(
             loadPosts()
         }
     }
+    val showLoading = ObservableInt().also { it.set(View.GONE) }
+    val noConnVisibility = ObservableInt().also { it.set(View.GONE) }
+    val layoutVisibility = ObservableInt().also { it.set(View.GONE) }
+
+    val retryClickListener = View.OnClickListener {
+        loadPosts()
+    }
 
     fun getPosts() : LiveData<List<PostAndPhoto>> {
         return posts
@@ -36,15 +45,16 @@ class PostListViewModel(
 
     private inner class LoadPostsCallback : SingleObserver<List<PostAndPhoto>> {
         override fun onSubscribe(d: Disposable) {
-            //showLoading.set(View.VISIBLE)
+            showLoading.set(View.VISIBLE)
         }
 
         override fun onSuccess(t: List<PostAndPhoto>) {
             posts.postValue(t)
             loadPhotos()
-            //showLoading.set(View.GONE)
-            //noConnVisibility.set(View.GONE)
-            //resErrorVisibility.set(View.GONE)
+
+            showLoading.set(View.GONE)
+            layoutVisibility.set(View.VISIBLE)
+            noConnVisibility.set(View.GONE)
         }
 
         override fun onError(e: Throwable) {
@@ -53,24 +63,27 @@ class PostListViewModel(
                 //resErrorVisibility.set((View.VISIBLE))
             } else {
                 // If it's not an HttpException means that it was a network error
-                //noConnVisibility.set(View.VISIBLE)
+                noConnVisibility.set(View.VISIBLE)
+                layoutVisibility.set(View.GONE)
             }
-            //showLoading.set(View.GONE)
+            showLoading.set(View.GONE)
         }
     }
 
     private inner class LoadPhotosCallback : SingleObserver<List<Photo>> {
         override fun onSubscribe(d: Disposable) {
-
         }
 
         override fun onSuccess(t: List<Photo>) {
-            posts.value?.let {
+            val data = posts.value
+            data?.let {
                 val photos = t.take(it.size)
                 it.mapIndexed { index, postAndPhoto ->
                     postAndPhoto.thumbnailUrl = photos[index].thumbnailUrl
                 }
             }
+
+            posts.postValue(data)
         }
 
         override fun onError(e: Throwable) {

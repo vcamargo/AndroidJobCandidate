@@ -5,9 +5,6 @@
 
     <data>
         <variable
-            name="visibility"
-            type="androidx.databinding.ObservableInt" />
-        <variable
             name="retryClickListener"
             type="android.view.View.OnClickListener"/>
     </data>
@@ -15,8 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:onClick="@{retryClickListener}"
-        android:visibility="@{visibility}">
+        android:onClick="@{retryClickListener}">
 
         <ImageView
             android:id="@+id/img_no_connection"

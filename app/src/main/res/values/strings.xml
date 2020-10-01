@@ -6,4 +6,6 @@
     <string name="no_connection_title">No Internet Connection</string>
     <string name="no_connection_desc">Ensure that you have internet connection, and try again.</string>
     <string name="no_connection_retry">Try again</string>
+    <string name="post_list_title">Posts List</string>
+    <string name="post_details_title">Post Details</string>
 </resources>

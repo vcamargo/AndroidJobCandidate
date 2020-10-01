@@ -51,11 +51,12 @@ class PostListFragment : Fragment() {
                     this)
             ).get(PostListViewModel::class.java)
 
-            binding.postsList.adapter = adapter
+            binding.adapter = adapter
             binding.viewmodel = vm
 
             vm.getPosts().observe(viewLifecycleOwner, { posts ->
                 adapter.submitList(posts)
+                adapter.notifyDataSetChanged()
             })
 
         } catch (ex: IllegalArgumentException) {

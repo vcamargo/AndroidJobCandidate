@@ -12,9 +12,9 @@ class Repository : IRepository {
     private val webservice: Webservice = Webservice.create()
 
     override fun getComments(postId: Int, callback: SingleObserver<List<Comment>>) {
-        webservice.getComments(postId)
-            .subscribeOn(Schedulers.newThread())
-            .subscribe(callback)
+            webservice.getComments(postId)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(callback)
     }
 
     override fun getPosts(callback: SingleObserver<List<PostAndPhoto>>) {
