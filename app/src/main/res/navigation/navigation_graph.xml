@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/postListFragment"
         android:name="app.storytel.candidate.com.fragment.PostListFragment"
-        android:label="fragment_post_list"
+        android:label="@string/post_list_title"
         tools:layout="@layout/fragment_post_list" >
         <action
             android:id="@+id/action_postListFragment_to_postDetailsFragment"
@@ -17,7 +17,7 @@
     <fragment
         android:id="@+id/postDetailsFragment"
         android:name="app.storytel.candidate.com.fragment.PostDetailsFragment"
-        android:label="fragment_post_details"
+        android:label="@string/post_details_title"
         tools:layout="@layout/fragment_post_details" >
         <argument
             android:name="postId"

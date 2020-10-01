@@ -3,14 +3,14 @@
 
     <data>
         <variable
-            name="visibility"
+            name="layoutVisibility"
             type="androidx.databinding.ObservableInt" />
     </data>
+
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:visibility="@{visibility}" />
-
+        android:visibility="@{layoutVisibility}" />
 </layout>
