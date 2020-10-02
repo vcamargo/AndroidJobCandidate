@@ -18,12 +18,18 @@ import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.viewmodel.PostListViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
 import app.storytel.candidate.com.webservice.Webservice
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PostListFragment : Fragment() {
 
     companion object {
         val LOG_TAG = "PostList"
     }
+
+    @Inject
+    lateinit var webservice: Webservice
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +54,7 @@ class PostListFragment : Fragment() {
             val vm = ViewModelProvider (
                 this,
                 ViewModelFactory (
-                    Repository(Webservice.create()),
+                    Repository(webservice),
                     this)
             ).get(PostListViewModel::class.java)
 
