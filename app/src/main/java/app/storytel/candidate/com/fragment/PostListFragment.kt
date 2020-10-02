@@ -2,11 +2,11 @@ package app.storytel.candidate.com.fragment
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -50,11 +50,12 @@ class PostListFragment : Fragment() {
 
     private fun subscribeUi(adapter: PostListAdapter, binding: FragmentPostListBinding) {
         try {
-            val vm = ViewModelProvider (
+            val vm = ViewModelProvider(
                 this,
-                ViewModelFactory (
+                ViewModelFactory(
                     repository,
-                    this)
+                    this
+                )
             ).get(PostListViewModel::class.java)
 
             binding.adapter = adapter

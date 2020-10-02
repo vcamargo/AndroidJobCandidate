@@ -31,18 +31,19 @@ class PostListViewModel(
         getPostsAndPhotos()
     }
 
-    fun getPosts() : LiveData<List<PostAndPhoto>> {
+    fun getPosts(): LiveData<List<PostAndPhoto>> {
         return posts
     }
 
     private fun getPostsAndPhotos() {
-        disposable.add(repository.getPostAndPhoto()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(LoadPostsCallback())
+        disposable.add(
+            repository.getPostAndPhoto()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(loadPostsCallbackprivate)
         )
     }
 
-    private inner class LoadPostsCallback : DisposableSingleObserver<List<PostAndPhoto>>() {
+    private val loadPostsCallbackprivate = object : DisposableSingleObserver<List<PostAndPhoto>>() {
         override fun onStart() {
             showLoading.set(View.VISIBLE)
         }

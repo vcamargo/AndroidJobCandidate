@@ -9,8 +9,7 @@ import app.storytel.candidate.com.repository.IRepository
 class ViewModelFactory(
     private val repository: IRepository,
     owner: SavedStateRegistryOwner
-)
-    : AbstractSavedStateViewModelFactory(owner, null) {
+) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel?> create(
         key: String,
@@ -20,8 +19,8 @@ class ViewModelFactory(
         if (modelClass.isAssignableFrom(PostListViewModel::class.java)) {
             return PostListViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(PostDetailsViewModel::class.java)) {
-                return PostDetailsViewModel(repository, handle) as T
-            }
+            return PostDetailsViewModel(repository, handle) as T
+        }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -7,14 +7,11 @@ import androidx.databinding.ObservableInt
 import androidx.databinding.ObservableList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavArgs
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.repository.IRepository
-import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 
 class PostDetailsViewModel(
@@ -24,6 +21,7 @@ class PostDetailsViewModel(
     companion object {
         private const val POST_ID_KEY = "POST_ID_KEY"
     }
+
     var postBody = ObservableField<String>()
     var postImageUrl = ObservableField<String>()
 
@@ -46,13 +44,14 @@ class PostDetailsViewModel(
     fun loadComments(postId: Int) {
         savedStateHandle.set(POST_ID_KEY, postId)
 
-        disposable.add(repository.getComments(postId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeWith(LoadCommentsCallback())
+        disposable.add(
+            repository.getComments(postId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(LoadCommentsCallback())
         )
     }
 
-    fun setArgs(args : PostDetailsFragmentArgs) {
+    fun setArgs(args: PostDetailsFragmentArgs) {
         postBody.set(args.postBody)
         postImageUrl.set(args.postImageUrl)
     }

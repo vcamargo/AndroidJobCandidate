@@ -6,8 +6,8 @@ import app.storytel.candidate.com.model.PostAndPhoto
 import io.reactivex.Single
 
 interface IRepository {
-    fun getPosts() : Single<List<PostAndPhoto>>
-    fun getPhotos() : Single<List<Photo>>
-    fun getPostAndPhoto() : Single<List<PostAndPhoto>>
-    fun getComments(postId: Int) : Single<List<Comment>>
+    fun getPosts(): Single<List<PostAndPhoto>>
+    fun getPhotos(): Single<List<Photo>>
+    fun getPostAndPhoto(): Single<List<PostAndPhoto>>
+    fun getComments(postId: Int): Single<List<Comment>>
 }
