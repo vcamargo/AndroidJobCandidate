@@ -17,7 +17,7 @@ object RepositoryModule {
     @Provides
     fun provideRepository(
         @ApiService webservice: Webservice
-    ) : IRepository {
+    ): IRepository {
         return Repository(webservice)
     }
 }

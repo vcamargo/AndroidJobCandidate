@@ -18,4 +18,5 @@ object NetworkModule {
         return Webservice.create()
     }
 }
+
 annotation class ApiService

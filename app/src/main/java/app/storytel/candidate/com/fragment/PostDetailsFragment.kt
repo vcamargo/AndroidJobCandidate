@@ -14,12 +14,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import app.storytel.candidate.com.R
 import app.storytel.candidate.com.databinding.FragmentPostDetailsBinding
-import app.storytel.candidate.com.modules.ApiService
 import app.storytel.candidate.com.repository.IRepository
-import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.viewmodel.PostDetailsViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
-import app.storytel.candidate.com.webservice.Webservice
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -56,11 +53,12 @@ class PostDetailsFragment : Fragment() {
 
     private fun subscribeUi(binding: FragmentPostDetailsBinding) {
         try {
-            val vm = ViewModelProvider (
+            val vm = ViewModelProvider(
                 this,
-                ViewModelFactory (
+                ViewModelFactory(
                     repository,
-                    this)
+                    this
+                )
             ).get(PostDetailsViewModel::class.java)
 
             vm.setArgs(args)

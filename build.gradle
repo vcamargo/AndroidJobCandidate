@@ -17,6 +17,7 @@ buildscript {
         glide_version = '4.11.0'
         hilt_gradle_version = '2.28-alpha'
         picasso_version = '2.71828'
+        mockito_version = '3.5.13'
     }
 
     repositories {
