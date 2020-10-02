@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion 30
@@ -62,8 +63,12 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
     implementation "io.reactivex.rxjava2:rxjava:$rx_java_version"
 
-    // Glide
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    // Picasso
+    implementation "com.squareup.picasso:picasso:$picasso_version"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_gradle_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_gradle_version"
 
     // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"

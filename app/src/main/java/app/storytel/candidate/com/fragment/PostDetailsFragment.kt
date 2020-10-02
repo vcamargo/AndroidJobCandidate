@@ -1,6 +1,7 @@
 package app.storytel.candidate.com.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +14,26 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import app.storytel.candidate.com.R
 import app.storytel.candidate.com.databinding.FragmentPostDetailsBinding
+import app.storytel.candidate.com.modules.ApiService
+import app.storytel.candidate.com.repository.IRepository
 import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.viewmodel.PostDetailsViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
 import app.storytel.candidate.com.webservice.Webservice
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PostDetailsFragment : Fragment() {
 
+    companion object {
+        val LOG_TAG = "PostDetailsFragment"
+    }
+
     val args: PostDetailsFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var repository: IRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,18 +59,16 @@ class PostDetailsFragment : Fragment() {
             val vm = ViewModelProvider (
                 this,
                 ViewModelFactory (
-                    Repository(Webservice.create()),
+                    repository,
                     this)
             ).get(PostDetailsViewModel::class.java)
 
-            vm.postBody.set(args.postBody)
-            vm.postImageUrl.set(args.postImageUrl)
-
+            vm.setArgs(args)
             binding.vm = vm
-
             vm.loadComments(args.postId)
-        } catch (ex: IllegalArgumentException) {
 
+        } catch (ex: IllegalArgumentException) {
+            Log.wtf(LOG_TAG, ex)
         }
     }
 }
