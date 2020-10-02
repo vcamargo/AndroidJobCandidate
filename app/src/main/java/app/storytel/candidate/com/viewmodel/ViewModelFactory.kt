@@ -18,7 +18,7 @@ class ViewModelFactory(
         handle: SavedStateHandle
     ): T {
         if (modelClass.isAssignableFrom(PostListViewModel::class.java)) {
-            return PostListViewModel(repository, handle) as T
+            return PostListViewModel(repository) as T
         } else if (modelClass.isAssignableFrom(PostDetailsViewModel::class.java)) {
                 return PostDetailsViewModel(repository, handle) as T
             }

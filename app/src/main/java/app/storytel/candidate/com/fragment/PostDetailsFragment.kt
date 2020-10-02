@@ -16,6 +16,7 @@ import app.storytel.candidate.com.databinding.FragmentPostDetailsBinding
 import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.viewmodel.PostDetailsViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
+import app.storytel.candidate.com.webservice.Webservice
 
 class PostDetailsFragment : Fragment() {
 
@@ -45,7 +46,7 @@ class PostDetailsFragment : Fragment() {
             val vm = ViewModelProvider (
                 this,
                 ViewModelFactory (
-                    Repository(),
+                    Repository(Webservice.create()),
                     this)
             ).get(PostDetailsViewModel::class.java)
 
