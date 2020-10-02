@@ -9,8 +9,15 @@ import io.reactivex.schedulers.Schedulers
 
 class Repository(private val webservice: Webservice) : IRepository {
 
+    companion object {
+        const val COMMENTS_NUMBER = 3L
+    }
+
     override fun getComments(postId: Int): Single<List<Comment>> {
         return webservice.getComments(postId)
+            .flattenAsObservable { it }
+            .take(COMMENTS_NUMBER)
+            .toList()
             .subscribeOn(Schedulers.io())
     }
 

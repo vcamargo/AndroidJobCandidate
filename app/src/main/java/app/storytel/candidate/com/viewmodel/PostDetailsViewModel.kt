@@ -1,5 +1,6 @@
 package app.storytel.candidate.com.viewmodel
 
+import android.util.Log
 import android.view.View
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
@@ -19,6 +20,7 @@ class PostDetailsViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
+        private const val LOG_TAG = "PostDetailsViewModel"
         private const val POST_ID_KEY = "POST_ID_KEY"
     }
 
@@ -66,7 +68,8 @@ class PostDetailsViewModel(
             showLoading.set(View.GONE)
             layoutVisibility.set(View.VISIBLE)
             noConnVisibility.set(View.GONE)
-            comments.addAll(t.take(3))
+            Log.d(LOG_TAG, t.size.toString())
+            comments.addAll(t)
         }
 
         override fun onError(e: Throwable) {

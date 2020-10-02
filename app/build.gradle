@@ -78,4 +78,6 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$text_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation 'com.squareup.assertj:assertj-android:1.2.0'
+
 }
