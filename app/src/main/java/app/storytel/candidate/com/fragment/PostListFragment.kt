@@ -14,10 +14,9 @@ import androidx.navigation.ui.setupWithNavController
 import app.storytel.candidate.com.R
 import app.storytel.candidate.com.adapter.PostListAdapter
 import app.storytel.candidate.com.databinding.FragmentPostListBinding
-import app.storytel.candidate.com.repository.Repository
+import app.storytel.candidate.com.repository.IRepository
 import app.storytel.candidate.com.viewmodel.PostListViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
-import app.storytel.candidate.com.webservice.Webservice
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -29,7 +28,7 @@ class PostListFragment : Fragment() {
     }
 
     @Inject
-    lateinit var webservice: Webservice
+    lateinit var repository: IRepository
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +53,7 @@ class PostListFragment : Fragment() {
             val vm = ViewModelProvider (
                 this,
                 ViewModelFactory (
-                    Repository(webservice),
+                    repository,
                     this)
             ).get(PostListViewModel::class.java)
 

@@ -1,5 +1,7 @@
 package app.storytel.candidate.com.modules
 
+import app.storytel.candidate.com.repository.IRepository
+import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.webservice.Webservice
 import dagger.Module
 import dagger.Provides
@@ -9,13 +11,13 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(ApplicationComponent::class)
-object NetworkModule {
+object RepositoryModule {
 
     @Singleton
     @Provides
-    @ApiService
-    fun provideApiService(): Webservice {
-        return Webservice.create()
+    fun provideRepository(
+        @ApiService webservice: Webservice
+    ) : IRepository {
+        return Repository(webservice)
     }
 }
-annotation class ApiService

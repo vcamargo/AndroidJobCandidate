@@ -7,6 +7,8 @@ import androidx.databinding.ObservableInt
 import androidx.databinding.ObservableList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavArgs
+import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.SingleObserver
@@ -48,6 +50,11 @@ class PostDetailsViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(LoadCommentsCallback())
         )
+    }
+
+    fun setArgs(args : PostDetailsFragmentArgs) {
+        postBody.set(args.postBody)
+        postImageUrl.set(args.postImageUrl)
     }
 
     private inner class LoadCommentsCallback : DisposableSingleObserver<List<Comment>>() {
