@@ -17,6 +17,7 @@ import app.storytel.candidate.com.databinding.FragmentPostListBinding
 import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.viewmodel.PostListViewModel
 import app.storytel.candidate.com.viewmodel.ViewModelFactory
+import app.storytel.candidate.com.webservice.Webservice
 
 class PostListFragment : Fragment() {
 
@@ -47,7 +48,7 @@ class PostListFragment : Fragment() {
             val vm = ViewModelProvider (
                 this,
                 ViewModelFactory (
-                    Repository(),
+                    Repository(Webservice.create()),
                     this)
             ).get(PostListViewModel::class.java)
 

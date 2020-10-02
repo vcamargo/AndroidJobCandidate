@@ -10,7 +10,10 @@ import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.SingleObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableSingleObserver
 
 class PostDetailsViewModel(
     private val repository: IRepository,
@@ -36,13 +39,19 @@ class PostDetailsViewModel(
         }
     }
 
+    private val disposable = CompositeDisposable()
+
     fun loadComments(postId: Int) {
         savedStateHandle.set(POST_ID_KEY, postId)
-        repository.getComments(postId, LoadCommentsCallback())
+
+        disposable.add(repository.getComments(postId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(LoadCommentsCallback())
+        )
     }
 
-    private inner class LoadCommentsCallback : SingleObserver<List<Comment>> {
-        override fun onSubscribe(d: Disposable) {
+    private inner class LoadCommentsCallback : DisposableSingleObserver<List<Comment>>() {
+        override fun onStart() {
             showLoading.set(View.VISIBLE)
             layoutVisibility.set(View.GONE)
         }
@@ -59,5 +68,11 @@ class PostDetailsViewModel(
             noConnVisibility.set(View.VISIBLE)
             layoutVisibility.set(View.GONE)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        disposable.dispose()
     }
 }

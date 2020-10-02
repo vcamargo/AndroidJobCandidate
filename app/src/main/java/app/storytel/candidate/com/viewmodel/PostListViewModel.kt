@@ -4,53 +4,51 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import app.storytel.candidate.com.model.Photo
 import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 import retrofit2.HttpException
 
 class PostListViewModel(
-    private val repository: IRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val repository: IRepository
 ) : ViewModel() {
 
     private val posts: MutableLiveData<List<PostAndPhoto>> by lazy {
         MutableLiveData<List<PostAndPhoto>>().also {
-            loadPosts()
+            getPostsAndPhotos()
         }
     }
+    private val disposable = CompositeDisposable()
+
     val showLoading = ObservableInt().also { it.set(View.GONE) }
     val noConnVisibility = ObservableInt().also { it.set(View.GONE) }
     val layoutVisibility = ObservableInt().also { it.set(View.GONE) }
 
     val retryClickListener = View.OnClickListener {
-        loadPosts()
+        getPostsAndPhotos()
     }
 
     fun getPosts() : LiveData<List<PostAndPhoto>> {
         return posts
     }
 
-    fun loadPosts() {
-        repository.getPosts(LoadPostsCallback())
+    private fun getPostsAndPhotos() {
+        disposable.add(repository.getPostAndPhoto()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeWith(LoadPostsCallback())
+        )
     }
 
-    fun loadPhotos() {
-        repository.getPhotos(LoadPhotosCallback())
-    }
-
-    private inner class LoadPostsCallback : SingleObserver<List<PostAndPhoto>> {
-        override fun onSubscribe(d: Disposable) {
+    private inner class LoadPostsCallback : DisposableSingleObserver<List<PostAndPhoto>>() {
+        override fun onStart() {
             showLoading.set(View.VISIBLE)
         }
 
         override fun onSuccess(t: List<PostAndPhoto>) {
             posts.postValue(t)
-            loadPhotos()
 
             showLoading.set(View.GONE)
             layoutVisibility.set(View.VISIBLE)
@@ -58,11 +56,8 @@ class PostListViewModel(
         }
 
         override fun onError(e: Throwable) {
-            // If it's an HttpException means that there was some issue in the backend
-            if (e is HttpException) {
-                //resErrorVisibility.set((View.VISIBLE))
-            } else {
-                // If it's not an HttpException means that it was a network error
+            // If it's not an HttpException means that it was a network error
+            if (e !is HttpException) {
                 noConnVisibility.set(View.VISIBLE)
                 layoutVisibility.set(View.GONE)
             }
@@ -70,24 +65,9 @@ class PostListViewModel(
         }
     }
 
-    private inner class LoadPhotosCallback : SingleObserver<List<Photo>> {
-        override fun onSubscribe(d: Disposable) {
-        }
+    override fun onCleared() {
+        super.onCleared()
 
-        override fun onSuccess(t: List<Photo>) {
-            val data = posts.value
-            data?.let {
-                val photos = t.take(it.size)
-                it.mapIndexed { index, postAndPhoto ->
-                    postAndPhoto.thumbnailUrl = photos[index].thumbnailUrl
-                }
-            }
-
-            posts.postValue(data)
-        }
-
-        override fun onError(e: Throwable) {
-
-        }
+        disposable.dispose()
     }
 }
