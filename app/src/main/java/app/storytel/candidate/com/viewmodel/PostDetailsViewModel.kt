@@ -1,11 +1,7 @@
 package app.storytel.candidate.com.viewmodel
 
-import android.util.Log
 import android.view.View
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
-import androidx.databinding.ObservableList
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
@@ -15,26 +11,26 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import retrofit2.HttpException
 
 class PostDetailsViewModel(
     private val repository: IRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     companion object {
-        private const val LOG_TAG = "PostDetailsViewModel"
         private const val POST_ID_KEY = "POST_ID_KEY"
     }
 
-    var postBody = ObservableField<String>()
-    var postImageUrl = ObservableField<String>()
+    var postBody = MutableLiveData<String>()
+    var postImageUrl = MutableLiveData<String>()
 
-    val comments: ObservableList<Comment> by lazy {
-        ObservableArrayList()
+    val commentsLiveData: MutableLiveData<List<Comment>> by lazy {
+        MutableLiveData<List<Comment>>()
     }
 
-    val showLoading = ObservableInt().also { it.set(View.GONE) }
-    val noConnVisibility = ObservableInt().also { it.set(View.GONE) }
-    val layoutVisibility = ObservableInt().also { it.set(View.GONE) }
+    val loadingVisibility = MutableLiveData(View.GONE)
+    val noConnVisibility = MutableLiveData(View.GONE)
+    val detailsLayoutVisibility = MutableLiveData(View.GONE)
 
     val retryClickListener = View.OnClickListener {
         savedStateHandle.get<Int>(POST_ID_KEY)?.let {
@@ -44,39 +40,42 @@ class PostDetailsViewModel(
 
     private val disposable = CompositeDisposable()
 
-    fun loadComments(postId: Int) {
-        savedStateHandle.set(POST_ID_KEY, postId)
-
+    private fun loadComments(postId: Int) {
         disposable.add(
             repository.getComments(postId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<Comment>>() {
                     override fun onStart() {
-                        showLoading.set(View.VISIBLE)
-                        layoutVisibility.set(View.GONE)
+                        loadingVisibility.postValue(View.VISIBLE)
                     }
 
                     override fun onSuccess(t: List<Comment>) {
-                        showLoading.set(View.GONE)
-                        layoutVisibility.set(View.VISIBLE)
-                        noConnVisibility.set(View.GONE)
-                        Log.d(LOG_TAG, t.size.toString())
-                        comments.addAll(t)
+                        commentsLiveData.postValue(t)
+
+                        loadingVisibility.postValue(View.GONE)
+                        detailsLayoutVisibility.postValue(View.VISIBLE)
+                        noConnVisibility.postValue(View.GONE)
                     }
 
                     override fun onError(e: Throwable) {
-                        showLoading.set(View.GONE)
-                        noConnVisibility.set(View.VISIBLE)
-                        layoutVisibility.set(View.GONE)
+                        // If it's not an HttpException means that it was a network error
+                        if (e !is HttpException) {
+                            noConnVisibility.postValue(View.VISIBLE)
+                            detailsLayoutVisibility.postValue(View.GONE)
+                        }
+                        loadingVisibility.postValue(View.GONE)
                     }
                 })
         )
     }
 
     fun setArgs(args: PostDetailsFragmentArgs) {
-        postBody.set(args.postBody)
-        postImageUrl.set(args.postImageUrl)
+        postBody.postValue(args.postBody)
+        postImageUrl.postValue(args.postImageUrl)
+
+        savedStateHandle.set(POST_ID_KEY, args.postId)
+        loadComments(args.postId)
     }
 
     override fun onCleared() {

@@ -22,7 +22,8 @@ class PostListViewModel (
             getPostsAndPhotos()
         }
     }
-    val disposable = CompositeDisposable()
+    private val disposable = CompositeDisposable()
+
     val loadingVisibility = MutableLiveData(View.GONE)
     val noConnVisibility = MutableLiveData(View.GONE)
     val listLayoutVisibility = MutableLiveData(View.GONE)
@@ -42,12 +43,10 @@ class PostListViewModel (
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<List<PostAndPhoto>>() {
                     override fun onStart() {
-                        //println("onStart")
                         loadingVisibility.postValue(View.VISIBLE)
                     }
 
                     override fun onSuccess(t: List<PostAndPhoto>) {
-                        //println("onSuccess")
                         posts.postValue(t)
 
                         loadingVisibility.postValue(View.GONE)
@@ -56,7 +55,6 @@ class PostListViewModel (
                     }
 
                     override fun onError(e: Throwable) {
-                        //println("onError")
                         // If it's not an HttpException means that it was a network error
                         if (e !is HttpException) {
                             noConnVisibility.postValue(View.VISIBLE)
