@@ -37,6 +37,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -46,6 +50,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
@@ -75,9 +80,8 @@ dependencies {
 
     // App Test Frameworks
     testImplementation "junit:junit:$junit_version"
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
     androidTestImplementation "androidx.test.ext:junit:$text_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation 'com.squareup.assertj:assertj-android:1.2.0'
-
 }

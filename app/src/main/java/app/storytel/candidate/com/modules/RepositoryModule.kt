@@ -15,7 +15,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideRepository(
+    fun provideRepository (
         @ApiService webservice: Webservice
     ): IRepository {
         return Repository(webservice)

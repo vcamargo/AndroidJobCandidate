@@ -60,12 +60,12 @@ class PostListFragment : Fragment() {
 
             binding.adapter = adapter
             binding.viewmodel = vm
+            binding.lifecycleOwner = this
 
-            vm.getPosts().observe(viewLifecycleOwner, { posts ->
+            vm.getPostsAndPhotosLiveData().observe(viewLifecycleOwner, { posts ->
                 adapter.submitList(posts)
                 adapter.notifyDataSetChanged()
             })
-
         } catch (ex: IllegalArgumentException) {
             Log.wtf(LOG_TAG, ex)
         }

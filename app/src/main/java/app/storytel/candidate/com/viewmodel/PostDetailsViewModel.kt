@@ -14,6 +14,7 @@ import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 class PostDetailsViewModel(
     private val repository: IRepository,
@@ -48,35 +49,34 @@ class PostDetailsViewModel(
 
         disposable.add(
             repository.getComments(postId)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(LoadCommentsCallback())
+                .subscribeWith(object : DisposableSingleObserver<List<Comment>>() {
+                    override fun onStart() {
+                        showLoading.set(View.VISIBLE)
+                        layoutVisibility.set(View.GONE)
+                    }
+
+                    override fun onSuccess(t: List<Comment>) {
+                        showLoading.set(View.GONE)
+                        layoutVisibility.set(View.VISIBLE)
+                        noConnVisibility.set(View.GONE)
+                        Log.d(LOG_TAG, t.size.toString())
+                        comments.addAll(t)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        showLoading.set(View.GONE)
+                        noConnVisibility.set(View.VISIBLE)
+                        layoutVisibility.set(View.GONE)
+                    }
+                })
         )
     }
 
     fun setArgs(args: PostDetailsFragmentArgs) {
         postBody.set(args.postBody)
         postImageUrl.set(args.postImageUrl)
-    }
-
-    private inner class LoadCommentsCallback : DisposableSingleObserver<List<Comment>>() {
-        override fun onStart() {
-            showLoading.set(View.VISIBLE)
-            layoutVisibility.set(View.GONE)
-        }
-
-        override fun onSuccess(t: List<Comment>) {
-            showLoading.set(View.GONE)
-            layoutVisibility.set(View.VISIBLE)
-            noConnVisibility.set(View.GONE)
-            Log.d(LOG_TAG, t.size.toString())
-            comments.addAll(t)
-        }
-
-        override fun onError(e: Throwable) {
-            showLoading.set(View.GONE)
-            noConnVisibility.set(View.VISIBLE)
-            layoutVisibility.set(View.GONE)
-        }
     }
 
     override fun onCleared() {
