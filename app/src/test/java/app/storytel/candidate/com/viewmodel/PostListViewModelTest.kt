@@ -49,11 +49,6 @@ class PostListViewModelTest {
 
     @Mock
     private lateinit var repository: IRepository
-
-    private lateinit var loadingVisibilityObserver: Observer<Int>
-    private lateinit var noConnVisibilityObserver: Observer<Int>
-    private lateinit var listLayoutVisibilityObserver: Observer<Int>
-    private lateinit var postsLiveData: Observer<List<PostAndPhoto>>
     private lateinit var vm: PostListViewModel
 
     @Before

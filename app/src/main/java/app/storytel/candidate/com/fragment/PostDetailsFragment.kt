@@ -61,9 +61,9 @@ class PostDetailsFragment : Fragment() {
                 )
             ).get(PostDetailsViewModel::class.java)
 
-            vm.setArgs(args)
             binding.vm = vm
-            vm.loadComments(args.postId)
+            binding.lifecycleOwner = this
+            vm.setArgs(args)
 
         } catch (ex: IllegalArgumentException) {
             Log.wtf(LOG_TAG, ex)
