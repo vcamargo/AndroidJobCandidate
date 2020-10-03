@@ -4,10 +4,14 @@ import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.model.Photo
 import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.webservice.Webservice
+import dagger.hilt.android.scopes.ActivityScoped
+import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class Repository(private val webservice: Webservice) : IRepository {
+class Repository constructor(private val webservice: Webservice) : IRepository {
 
     companion object {
         const val COMMENTS_NUMBER = 3L
@@ -18,15 +22,14 @@ class Repository(private val webservice: Webservice) : IRepository {
             .flattenAsObservable { it }
             .take(COMMENTS_NUMBER)
             .toList()
-            .subscribeOn(Schedulers.io())
     }
 
     override fun getPosts(): Single<List<PostAndPhoto>> {
-        return webservice.getPosts().subscribeOn(Schedulers.io())
+        return webservice.getPosts()
     }
 
     override fun getPhotos(): Single<List<Photo>> {
-        return webservice.getPhotos().subscribeOn(Schedulers.io())
+        return webservice.getPhotos()
     }
 
     override fun getPostAndPhoto(): Single<List<PostAndPhoto>> {
@@ -40,6 +43,6 @@ class Repository(private val webservice: Webservice) : IRepository {
                     postAndPhoto.thumbnailUrl = photos[index].thumbnailUrl
                 }
                 return@zip postList
-            }).subscribeOn(Schedulers.io())
+            })
     }
 }

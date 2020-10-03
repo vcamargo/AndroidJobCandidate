@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import app.storytel.candidate.com.repository.IRepository
+import io.reactivex.schedulers.Schedulers
 
 class ViewModelFactory(
     private val repository: IRepository,

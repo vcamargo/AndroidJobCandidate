@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:listAdapter="@{adapter}"
-            android:visibility="@{viewmodel.layoutVisibility}"
+            android:visibility="@{viewmodel.listLayoutVisibility}"
             tools:visibility="gone" />
 
         <include
@@ -37,7 +37,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.486"
-            app:layoutVisibility="@{viewmodel.showLoading}" />
+            android:visibility="@{viewmodel.loadingVisibility}" />
 
         <include
             layout="@layout/no_conn_error"
