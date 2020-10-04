@@ -14,11 +14,11 @@ buildscript {
         retrofit_version = '2.9.0'
         rx_android_version = "2.0.2"
         rx_java_version = "2.2.9"
-        glide_version = '4.11.0'
-        hilt_gradle_version = '2.28-alpha'
+        hilt_gradle_version = '2.29.1-alpha'
         picasso_version = '2.71828'
         mockito_version = '3.5.13'
         core_testing_version = '2.1.0'
+        mock_webserver_version = '4.9.0'
     }
 
     repositories {

@@ -2,7 +2,6 @@ package app.storytel.candidate.com.viewmodel
 
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
 import app.storytel.candidate.com.util.RxImmediateSchedulerRule

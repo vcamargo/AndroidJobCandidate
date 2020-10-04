@@ -2,7 +2,6 @@ package app.storytel.candidate.com.viewmodel
 
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
@@ -10,7 +9,6 @@ import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
 import app.storytel.candidate.com.util.RxImmediateSchedulerRule
 import app.storytel.candidate.com.util.testObserver
-import io.reactivex.Single
 import io.reactivex.Single.just
 import org.junit.Assert
 import org.junit.Before
@@ -18,7 +16,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.anyInt
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -41,17 +40,23 @@ class PostDetailsViewModelTest {
     private lateinit var savedStateHandle: SavedStateHandle
 
     @Mock
-    private lateinit var args : PostDetailsFragmentArgs
+    private lateinit var args: PostDetailsFragmentArgs
 
     private lateinit var vm: PostDetailsViewModel
 
     private val commentsList = listOf(
-        Comment(1,1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"),
-        Comment(1,1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"),
-        Comment(1,1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam")
+        Comment(
+            1, 1, "id labore ex et quam laborum",
+            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
+        ),
+        Comment(
+            1, 1, "id labore ex et quam laborum",
+            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
+        ),
+        Comment(
+            1, 1, "id labore ex et quam laborum",
+            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
+        )
     )
 
     private val post = PostAndPhoto(
@@ -59,6 +64,7 @@ class PostDetailsViewModelTest {
         "quia et suscipit nsuscipit recusandae consequuntur",
         "https://via.placeholder.com/150/92c952"
     )
+
     @Before
     fun setUp() {
         vm = PostDetailsViewModel(repository, savedStateHandle)
