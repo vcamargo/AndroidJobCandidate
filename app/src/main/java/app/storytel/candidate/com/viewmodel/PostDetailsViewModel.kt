@@ -7,8 +7,9 @@ import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.repository.IRepository
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
@@ -28,6 +29,29 @@ class PostDetailsViewModel(
         MutableLiveData<List<Comment>>()
     }
 
+    val subscriber = object : SingleObserver<List<Comment>> {
+        override fun onSubscribe(d: Disposable) {
+            loadingVisibility.postValue(View.VISIBLE)
+        }
+
+        override fun onSuccess(t: List<Comment>) {
+            commentsLiveData.postValue(t)
+
+            loadingVisibility.postValue(View.GONE)
+            detailsLayoutVisibility.postValue(View.VISIBLE)
+            noConnVisibility.postValue(View.GONE)
+        }
+
+        override fun onError(e: Throwable) {
+            // If it's not an HttpException means that it was a network error
+            if (e !is HttpException) {
+                noConnVisibility.postValue(View.VISIBLE)
+                detailsLayoutVisibility.postValue(View.GONE)
+            }
+            loadingVisibility.postValue(View.GONE)
+        }
+    }
+
     val loadingVisibility = MutableLiveData(View.GONE)
     val noConnVisibility = MutableLiveData(View.GONE)
     val detailsLayoutVisibility = MutableLiveData(View.GONE)
@@ -38,36 +62,11 @@ class PostDetailsViewModel(
         }
     }
 
-    private val disposable = CompositeDisposable()
-
     private fun loadComments(postId: Int) {
-        disposable.add(
             repository.getComments(postId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<List<Comment>>() {
-                    override fun onStart() {
-                        loadingVisibility.postValue(View.VISIBLE)
-                    }
-
-                    override fun onSuccess(t: List<Comment>) {
-                        commentsLiveData.postValue(t)
-
-                        loadingVisibility.postValue(View.GONE)
-                        detailsLayoutVisibility.postValue(View.VISIBLE)
-                        noConnVisibility.postValue(View.GONE)
-                    }
-
-                    override fun onError(e: Throwable) {
-                        // If it's not an HttpException means that it was a network error
-                        if (e !is HttpException) {
-                            noConnVisibility.postValue(View.VISIBLE)
-                            detailsLayoutVisibility.postValue(View.GONE)
-                        }
-                        loadingVisibility.postValue(View.GONE)
-                    }
-                })
-        )
+                .subscribe(subscriber)
     }
 
     fun setArgs(args: PostDetailsFragmentArgs) {
@@ -76,11 +75,5 @@ class PostDetailsViewModel(
 
         savedStateHandle.set(POST_ID_KEY, args.postId)
         loadComments(args.postId)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-
-        disposable.dispose()
     }
 }

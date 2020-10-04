@@ -8,6 +8,7 @@ import app.storytel.candidate.com.util.RxImmediateSchedulerRule
 import app.storytel.candidate.com.util.testObserver
 import io.reactivex.Single.error
 import io.reactivex.Single.just
+import io.reactivex.observers.DisposableObserver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -68,7 +69,8 @@ class PostListViewModelTest {
         val postsLiveData = vm.getPostsAndPhotosLiveData().testObserver()
 
         //then
-        sleep(500)
+        // TODO: Find a proper way to wait for rxjava single completion before evaluate the results
+        sleep(100)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE, View.GONE), loadingValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE), mainLayoutValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.GONE), noConnLayoutValues.observedValue)
@@ -89,7 +91,8 @@ class PostListViewModelTest {
         vm.getPostsAndPhotosLiveData()
 
         //then
-        sleep(500)
+        // TODO: Find a proper way to wait for rxjava single completion before evaluate the results
+        sleep(100)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE, View.GONE), loadingValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.GONE), mainLayoutValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE), noConnLayoutValues.observedValue)
