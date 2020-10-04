@@ -4,12 +4,7 @@ import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.model.Photo
 import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.webservice.Webservice
-import dagger.hilt.android.scopes.ActivityScoped
-import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
-import javax.inject.Singleton
 
 class Repository constructor(private val webservice: Webservice) : IRepository {
 

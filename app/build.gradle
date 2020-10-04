@@ -22,6 +22,16 @@ android {
     }
 
     buildTypes {
+
+        all {
+            buildConfigField "String", "BASE_URL", '"https://jsonplaceholder.typicode.com"'
+        }
+
+        mock {
+            initWith debug
+            buildConfigField "String", "BASE_URL", '"http://127.0.0.1:8080"'
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -50,12 +60,12 @@ dependencies {
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-    implementation "android.arch.lifecycle:extensions:1.1.1"
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$mock_webserver_version"
 
     // gson
     implementation "com.google.code.gson:gson:$gson_version"
@@ -75,14 +85,14 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_gradle_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_gradle_version"
 
-    // Testing Navigation
-    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
-
-    // App Test Frameworks
+    // Unit Test
     testImplementation "junit:junit:$junit_version"
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "org.mockito:mockito-inline:$mockito_version"
+
+    // UI Test
     androidTestImplementation "androidx.test.ext:junit:$text_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$mock_webserver_version"
 }

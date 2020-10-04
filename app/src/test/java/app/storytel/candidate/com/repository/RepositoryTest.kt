@@ -96,7 +96,7 @@ class RepositoryTest {
 
         repository = Repository(webservice)
 
-        val postsObserver : TestObserver<List<PostAndPhoto>> = repository.getPosts().test()
+        val postsObserver: TestObserver<List<PostAndPhoto>> = repository.getPosts().test()
 
         postsObserver.awaitTerminalEvent()
 
@@ -113,7 +113,7 @@ class RepositoryTest {
 
         repository = Repository(webservice)
 
-        val photosObserver : TestObserver<List<Photo>> = repository.getPhotos().test()
+        val photosObserver: TestObserver<List<Photo>> = repository.getPhotos().test()
 
         photosObserver.awaitTerminalEvent()
 
@@ -134,8 +134,8 @@ class RepositoryTest {
 
         repository = Repository(webservice)
 
-        val postAndPhotoObserver : TestObserver<List<PostAndPhoto>>
-                = repository.getPostAndPhoto().test()
+        val postAndPhotoObserver: TestObserver<List<PostAndPhoto>> =
+            repository.getPostAndPhoto().test()
 
         postAndPhotoObserver.awaitTerminalEvent()
 
@@ -146,9 +146,9 @@ class RepositoryTest {
                 Observable.fromIterable(list)
                     .map { it.thumbnailUrl }
                     .toList()
-                    .blockingGet() == photosList.map { it.thumbnailUrl}
-                        .take(Repository.COMMENTS_NUMBER.toInt())
-                        .toList()
+                    .blockingGet() == photosList.map { it.thumbnailUrl }
+                    .take(Repository.COMMENTS_NUMBER.toInt())
+                    .toList()
             }
     }
 
@@ -160,13 +160,12 @@ class RepositoryTest {
 
         repository = Repository(webservice)
 
-        val commentsObserver : TestObserver<List<Comment>>
-                = repository.getComments(anyInt()).test()
+        val commentsObserver: TestObserver<List<Comment>> = repository.getComments(anyInt()).test()
 
         commentsObserver.awaitTerminalEvent()
 
         commentsObserver
             .assertNoErrors()
-            .assertValue { it.size == Repository.COMMENTS_NUMBER.toInt()}
+            .assertValue { it.size == Repository.COMMENTS_NUMBER.toInt() }
     }
 }
