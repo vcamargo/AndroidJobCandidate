@@ -2,13 +2,12 @@ package app.storytel.candidate.com.viewmodel
 
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
+import app.storytel.candidate.com.repository.postsMockData
 import app.storytel.candidate.com.util.RxImmediateSchedulerRule
 import app.storytel.candidate.com.util.testObserver
 import io.reactivex.Single.error
 import io.reactivex.Single.just
-import io.reactivex.observers.DisposableObserver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -32,21 +31,6 @@ class PostListViewModelTest {
     @get:Rule
     val schedulers = RxImmediateSchedulerRule()
 
-    val postsList = listOf(
-        PostAndPhoto(
-            1, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        ),
-        PostAndPhoto(
-            2, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        ),
-        PostAndPhoto(
-            3, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        )
-    )
-
     @Mock
     private lateinit var repository: IRepository
     private lateinit var vm: PostListViewModel
@@ -60,7 +44,7 @@ class PostListViewModelTest {
     fun getPostsAndPhotosSuccessTest() {
         //when
         `when`(repository.getPostAndPhoto()).thenReturn(
-            just(postsList)
+            just(postsMockData)
         )
 
         val loadingValues = vm.loadingVisibility.testObserver()
@@ -74,7 +58,7 @@ class PostListViewModelTest {
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE, View.GONE), loadingValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE), mainLayoutValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.GONE), noConnLayoutValues.observedValue)
-        Assert.assertEquals(listOf(postsList), postsLiveData.observedValue)
+        Assert.assertEquals(listOf(postsMockData), postsLiveData.observedValue)
     }
 
     @Test

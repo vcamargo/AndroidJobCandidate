@@ -1,6 +1,8 @@
 package app.storytel.candidate.com.modules
 
+import app.storytel.candidate.com.BuildConfig
 import app.storytel.candidate.com.repository.IRepository
+import app.storytel.candidate.com.repository.MockRepository
 import app.storytel.candidate.com.repository.Repository
 import app.storytel.candidate.com.webservice.Webservice
 import dagger.Module
@@ -18,6 +20,10 @@ object RepositoryModule {
     fun provideRepository(
         @ApiService webservice: Webservice
     ): IRepository {
-        return Repository(webservice)
+        return if (BuildConfig.BUILD_TYPE == "mock") {
+            MockRepository()
+        } else {
+            Repository(webservice)
+        }
     }
 }

@@ -1,18 +1,15 @@
 package app.storytel.candidate.com.viewmodel
 
 import android.view.View
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
-import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 
@@ -64,10 +61,10 @@ class PostDetailsViewModel(
     }
 
     private fun loadComments(postId: Int) {
-            repository.getComments(postId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber)
+        repository.getComments(postId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(subscriber)
     }
 
     fun setArgs(args: PostDetailsFragmentArgs) {

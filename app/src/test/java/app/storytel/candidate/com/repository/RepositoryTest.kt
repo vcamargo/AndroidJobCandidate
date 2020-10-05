@@ -22,76 +22,10 @@ class RepositoryTest {
 
     private lateinit var repository: IRepository
 
-    val postsList = listOf(
-        PostAndPhoto(
-            1, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        ),
-        PostAndPhoto(
-            2, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        ),
-        PostAndPhoto(
-            3, "sunt aut facere repellat provident",
-            "quia et suscipit nsuscipit recusandae consequuntur", ""
-        )
-    )
-
-    val photosList = listOf(
-        Photo(
-            1, 1, "accusamus beatae",
-            "https://via.placeholder.com/600/92c952",
-            "https://via.placeholder.com/150/92c952"
-        ),
-        Photo(
-            1, 2, "accusamus beatae",
-            "https://via.placeholder.com/600/771796",
-            "https://via.placeholder.com/150/771796"
-        ),
-        Photo(
-            1, 3, "accusamus beatae",
-            "https://via.placeholder.com/600/24f355",
-            "https://via.placeholder.com/150/24f355"
-        ),
-        Photo(
-            1, 4, "accusamus beatae",
-            "https://via.placeholder.com/600/d32776",
-            "https://via.placeholder.com/150/d32776"
-        ),
-        Photo(
-            1, 5, "accusamus beatae",
-            "https://via.placeholder.com/600/f66b97",
-            "https://via.placeholder.com/150/f66b97"
-        )
-    )
-
-    val postComments = listOf(
-        Comment(
-            1, 1, "id labore ex",
-            "Eliseo@gardner.biz", "laudantium enim quasi est"
-        ),
-        Comment(
-            1, 2, "id labore ex",
-            "Jayne_Kuhic@sydney.com", "laudantium enim quasi est"
-        ),
-        Comment(
-            1, 3, "id labore ex",
-            "Nikita@garfield.biz", "laudantium enim quasi est"
-        ),
-        Comment(
-            1, 4, "id labore ex",
-            "Lew@alysha.tv", "laudantium enim quasi est"
-        ),
-        Comment(
-            1, 5, "id labore ex",
-            "Hayden@althea.biz", "laudantium enim quasi est"
-        )
-    )
-
     @Test
     fun getPostsTest() {
         `when`(webservice.getPosts()).thenReturn(
-            just(postsList)
+            just(postsMockData)
         )
 
         repository = Repository(webservice)
@@ -102,13 +36,13 @@ class RepositoryTest {
 
         postsObserver
             .assertNoErrors()
-            .assertValue { it.size == postsList.size }
+            .assertValue { it.size == postsMockData.size }
     }
 
     @Test
     fun getPhotosTest() {
         `when`(webservice.getPhotos()).thenReturn(
-            just(photosList)
+            just(photosMockData)
         )
 
         repository = Repository(webservice)
@@ -119,17 +53,17 @@ class RepositoryTest {
 
         photosObserver
             .assertNoErrors()
-            .assertValue { it.size == photosList.size }
+            .assertValue { it.size == photosMockData.size }
     }
 
     @Test
     fun getPostAndPhotoTest() {
         `when`(webservice.getPhotos()).thenReturn(
-            just(photosList)
+            just(photosMockData)
         )
 
         `when`(webservice.getPosts()).thenReturn(
-            just(postsList)
+            just(postsMockData)
         )
 
         repository = Repository(webservice)
@@ -141,21 +75,21 @@ class RepositoryTest {
 
         postAndPhotoObserver
             .assertNoErrors()
-            .assertValue { it.size == postsList.size }
+            .assertValue { it.size == postsMockData.size }
             .assertValue { list ->
                 Observable.fromIterable(list)
                     .map { it.thumbnailUrl }
                     .toList()
-                    .blockingGet() == photosList.map { it.thumbnailUrl }
-                    .take(Repository.COMMENTS_NUMBER.toInt())
-                    .toList()
+                    .blockingGet() ==
+                        photosMockData.map { it.thumbnailUrl }
+                            .take(postsMockData.size)
             }
     }
 
     @Test
     fun getCommentsTest() {
         `when`(webservice.getComments(anyInt())).thenReturn(
-            just(postComments)
+            just(commentsMockData)
         )
 
         repository = Repository(webservice)

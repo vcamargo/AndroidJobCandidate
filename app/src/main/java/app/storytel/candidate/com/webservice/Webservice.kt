@@ -1,6 +1,5 @@
 package app.storytel.candidate.com.webservice
 
-import app.storytel.candidate.com.BuildConfig
 import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.model.Photo
 import app.storytel.candidate.com.model.PostAndPhoto
@@ -15,13 +14,15 @@ import retrofit2.http.Path
 interface Webservice {
 
     companion object {
+        const val BASE_URL = "https://jsonplaceholder.typicode.com"
+
         fun create(): Webservice {
 
             val client = OkHttpClient.Builder()
                 .build()
 
             return Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
