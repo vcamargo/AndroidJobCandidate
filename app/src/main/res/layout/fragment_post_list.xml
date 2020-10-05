@@ -25,6 +25,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:listAdapter="@{adapter}"
             android:visibility="@{viewmodel.listLayoutVisibility}"
+            app:vm="@{viewmodel}"
             tools:visibility="gone" />
 
         <include

@@ -7,6 +7,9 @@
         <variable
             name="listAdapter"
             type="app.storytel.candidate.com.adapter.PostListAdapter" />
+        <variable
+            name="vm"
+            type="app.storytel.candidate.com.viewmodel.PostListViewModel" />
     </data>
 
 <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -51,7 +54,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/list_item_post"
         tools:visibility="visible"
-        app:setAdapter="@{listAdapter}"/>
+        app:setAdapter="@{listAdapter}"
+        app:setData="@{vm.getPostsAndPhotosLiveData()}"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

@@ -25,9 +25,14 @@ class PostListViewModel(
             getPostsAndPhotos()
         }
     }
+    val loadingVisibility = MutableLiveData(View.VISIBLE)
+    val noConnVisibility = MutableLiveData(View.GONE)
+    val listLayoutVisibility = MutableLiveData(View.GONE)
+    val retryClickListener = View.OnClickListener {
+        getPostsAndPhotos()
+    }
 
     private val subscriber = object : SingleObserver<List<PostAndPhoto>> {
-
         override fun onSubscribe(d: Disposable) {
             loadingVisibility.postValue(View.VISIBLE)
         }
@@ -46,16 +51,10 @@ class PostListViewModel(
                 noConnVisibility.postValue(View.VISIBLE)
                 listLayoutVisibility.postValue(View.GONE)
             }
+            //TODO: If it's a HTTP exception like HTTP 500, we'll display a blank screen
+            // with no option to retry.
             loadingVisibility.postValue(View.GONE)
         }
-    }
-
-    val loadingVisibility = MutableLiveData(View.GONE)
-    val noConnVisibility = MutableLiveData(View.GONE)
-    val listLayoutVisibility = MutableLiveData(View.GONE)
-
-    val retryClickListener = View.OnClickListener {
-        getPostsAndPhotos()
     }
 
     fun getPostsAndPhotosLiveData(): LiveData<List<PostAndPhoto>> {
