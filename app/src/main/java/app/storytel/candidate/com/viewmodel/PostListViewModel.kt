@@ -25,7 +25,7 @@ class PostListViewModel(
             getPostsAndPhotos()
         }
     }
-    val loadingVisibility = MutableLiveData(View.VISIBLE)
+    val loadingVisibility = MutableLiveData(View.GONE)
     val noConnVisibility = MutableLiveData(View.GONE)
     val listLayoutVisibility = MutableLiveData(View.GONE)
     val retryClickListener = View.OnClickListener {

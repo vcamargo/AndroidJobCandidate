@@ -29,7 +29,7 @@ class PostDetailsViewModel(
     val commentsLiveData: MutableLiveData<List<Comment>> by lazy {
         MutableLiveData<List<Comment>>()
     }
-    val loadingVisibility = MutableLiveData(View.VISIBLE)
+    val loadingVisibility = MutableLiveData(View.GONE)
     val noConnVisibility = MutableLiveData(View.GONE)
     val detailsLayoutVisibility = MutableLiveData(View.GONE)
     val retryClickListener = View.OnClickListener {
