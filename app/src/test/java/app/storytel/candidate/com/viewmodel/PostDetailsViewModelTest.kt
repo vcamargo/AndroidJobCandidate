@@ -4,9 +4,9 @@ import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
-import app.storytel.candidate.com.model.Comment
 import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
+import app.storytel.candidate.com.repository.commentsMockData
 import app.storytel.candidate.com.util.RxImmediateSchedulerRule
 import app.storytel.candidate.com.util.testObserver
 import io.reactivex.Single.just
@@ -44,22 +44,7 @@ class PostDetailsViewModelTest {
 
     private lateinit var vm: PostDetailsViewModel
 
-    private val commentsList = listOf(
-        Comment(
-            1, 1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
-        ),
-        Comment(
-            1, 1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
-        ),
-        Comment(
-            1, 1, "id labore ex et quam laborum",
-            "Eliseo@gardner.biz", "laudantium enim quasi est quidem magnam"
-        )
-    )
-
-    private val post = PostAndPhoto(
+    val post = PostAndPhoto(
         1, "sunt aut facere repellat provident",
         "quia et suscipit nsuscipit recusandae consequuntur",
         "https://via.placeholder.com/150/92c952"
@@ -74,7 +59,7 @@ class PostDetailsViewModelTest {
     fun setArgsTest() {
         //when
         `when`(repository.getComments(anyInt())).thenReturn(
-            just(commentsList)
+            just(commentsMockData)
         )
         `when`(args.postBody).thenReturn(
             post.body
@@ -100,7 +85,7 @@ class PostDetailsViewModelTest {
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE, View.GONE), loadingValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.VISIBLE), mainLayoutValues.observedValue)
         Assert.assertEquals(listOf(View.GONE, View.GONE), noConnLayoutValues.observedValue)
-        Assert.assertEquals(listOf(commentsList), commentsLiveData.observedValue)
+        Assert.assertEquals(listOf(commentsMockData), commentsLiveData.observedValue)
         Assert.assertEquals(listOf(post.body), postBodyLiveData.observedValue)
         Assert.assertEquals(listOf(post.thumbnailUrl), postImageUrlLiveData.observedValue)
     }
