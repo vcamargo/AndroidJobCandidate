@@ -1,11 +1,13 @@
 package app.storytel.candidate.com.viewmodel
 
 import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import app.storytel.candidate.com.fragment.PostDetailsFragmentArgs
 import app.storytel.candidate.com.model.Comment
+import app.storytel.candidate.com.model.PostAndPhoto
 import app.storytel.candidate.com.repository.IRepository
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,12 +26,19 @@ class PostDetailsViewModel(
 
     var postBody = MutableLiveData<String>()
     var postImageUrl = MutableLiveData<String>()
-
     val commentsLiveData: MutableLiveData<List<Comment>> by lazy {
         MutableLiveData<List<Comment>>()
     }
+    val loadingVisibility = MutableLiveData(View.GONE)
+    val noConnVisibility = MutableLiveData(View.GONE)
+    val detailsLayoutVisibility = MutableLiveData(View.GONE)
+    val retryClickListener = View.OnClickListener {
+        savedStateHandle.get<Int>(POST_ID_KEY)?.let {
+            loadComments(it)
+        }
+    }
 
-    val subscriber = object : SingleObserver<List<Comment>> {
+    private val subscriber = object : SingleObserver<List<Comment>> {
         override fun onSubscribe(d: Disposable) {
             loadingVisibility.postValue(View.VISIBLE)
         }
@@ -48,17 +57,9 @@ class PostDetailsViewModel(
                 noConnVisibility.postValue(View.VISIBLE)
                 detailsLayoutVisibility.postValue(View.GONE)
             }
+            //TODO: If it's a HTTP exception like HTTP 500, we'll display a blank screen
+            // with no option to retry.
             loadingVisibility.postValue(View.GONE)
-        }
-    }
-
-    val loadingVisibility = MutableLiveData(View.GONE)
-    val noConnVisibility = MutableLiveData(View.GONE)
-    val detailsLayoutVisibility = MutableLiveData(View.GONE)
-
-    val retryClickListener = View.OnClickListener {
-        savedStateHandle.get<Int>(POST_ID_KEY)?.let {
-            loadComments(it)
         }
     }
 
