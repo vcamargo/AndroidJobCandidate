@@ -35,6 +35,14 @@ The app was developed using the following "components" :
 
 [Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 
+### Build Variants
+
+The app has two main build variants, debug and mock.
+
+Debug will use the live API data, reaching the backend.
+
+Mock will use mocked data from MockRepository class.
+If you select the first item of the list it will show a network error screen (this is the intended behavior used by the UI tests).
 
 ### UI Tests
 
