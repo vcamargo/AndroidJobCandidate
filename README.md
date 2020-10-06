@@ -19,6 +19,23 @@ This means that we expect that the app is stable and performs well in all possib
 
 # Solution
 
+### Main App Components
+
+The app was developed using the following "components" :
+
+[Navigation Component](https://developer.android.com/guide/navigation)
+
+[Databinding](https://developer.android.com/topic/libraries/data-binding)
+
+[LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+
+[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+
+[RXJava](https://github.com/ReactiveX/RxJava)
+
+[Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
+
+
 ### UI Tests
 
 UI Tests are taking advantage of the class MockRepository.kt where we have total control over the
