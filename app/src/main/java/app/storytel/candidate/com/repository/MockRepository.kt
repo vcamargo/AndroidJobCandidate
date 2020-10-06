@@ -21,6 +21,10 @@ class MockRepository : IRepository {
     }
 
     override fun getComments(postId: Int): Single<List<Comment>> {
-        return Single.just(commentsMockData).delay(2, TimeUnit.SECONDS)
+        // Implementation to match UI Tests need
+        return when (postId) {
+            1 -> Single.error(Exception("exception"))
+            else -> Single.just(commentsMockData).delay(2, TimeUnit.SECONDS)
+        }
     }
 }

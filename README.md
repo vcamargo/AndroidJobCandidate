@@ -1,3 +1,5 @@
+![Android CI](https://github.com/vcamargo/AndroidJobCandidate/workflows/Android%20CI/badge.svg)
+
 # Android Job Candidate
 
 ### Task Description
@@ -15,4 +17,14 @@ This means that we expect that the app is stable and performs well in all possib
 
 *At the interview we expect you to walk us through the code and explain what you have done.*
 
+# Solution
 
+### UI Tests
+
+UI Tests are taking advantage of the class MockRepository.kt where we have total control over the
+responses that we'll send back to the UI.
+
+That's why the UI tests are currently being executed using the mock build variant.
+
+If you want to run the UI Tests using the live API data, please comment out app/build.gradle
+line 25 "testBuildType "mock". But doing so it will lead to UI test failures due to network call latency.

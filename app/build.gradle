@@ -21,8 +21,8 @@ android {
         dataBinding true
     }
 
-    // Uncomment to run the UI Tests using the mock build variant
-    //testBuildType "mock"
+    // Run the UI Tests using the mock build variant
+    testBuildType "mock"
 
     buildTypes {
 
