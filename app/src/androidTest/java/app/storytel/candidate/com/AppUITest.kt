@@ -37,17 +37,29 @@ class AppUITest {
         // Check if Recyclerview is displayed
         onView(withId(R.id.postsList)).check(matches(isDisplayed()))
 
-        // Click in the first item in the list
+        // Click in the second item in the list
         onView(withId(R.id.postsList))
-            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
 
-        // Check if Loading spinner is not visible
-        onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
+        // Check if Loading spinner is visible
+        onView(withId(R.id.progress_bar)).check(matches(isDisplayed()))
 
         // Wait Until mock data fetch is completed
         waitUntilViewIsDisplayed(withId(R.id.root_layout_cardviews))
 
         // Check if Loading spinner is not visible
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
+    fun postDetailsError() {
+        // Wait Until mock data fetch is completed
+        waitUntilViewIsDisplayed(withId(R.id.postsList))
+
+        // Click in the first item in the list (should lead to network error)
+        onView(withId(R.id.postsList))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        onView(withId(R.id.no_conn_layout)).check(matches(isDisplayed()))
     }
 }
